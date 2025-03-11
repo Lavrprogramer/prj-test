@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"prj-test/domain"
 	"strconv"
 	"time"
 
@@ -13,23 +14,50 @@ const (
 	pointsPerQuestion = 10
 )
 
+var id uint64 = 1
+
 func main() {
 
 	fmt.Println("Вітаємо у гір MathGame!!!")
 
-	for i := 5; i > 0; i-- {
-		fmt.Println(i)
-		time.Sleep(1 * time.Second)
+	var users []domain.User
+
+	for {
+		menu()
+
+		choice := ""
+		fmt.Scan(&choice)
+
+		switch choice {
+		case "1":
+			user := play()
+			users = append(users, user)
+
+		case "2":
+			fmt.Println("рейтингу нема :")
+			for _, u := range users {
+				fmt.Printf("Id: %v, Name: %s, Time: %v\n", u.Id, u.Name, u.Time)
+			}
+		case "3":
+			return
+		default:
+			fmt.Println("Недійсний варіант")
+
+		}
 	}
-	start := time.Now()
-	play()
-	finish := time.Now()
-	timeSpent := finish.Sub(start)
-	fmt.Printf("Вітаю! Ти впорався за: %v", timeSpent)
-	time.Sleep(10 * time.Second)
+
 }
 
-func play() {
+func menu() {
+
+	fmt.Println("1. Грати")
+	fmt.Println("2.Рейтинг")
+	fmt.Println("3. Вийти")
+
+}
+
+func play() domain.User {
+	start := time.Now()
 	myPoints := 0
 	for myPoints < totalPoints {
 		x, y := rand.Intn(100), rand.Intn(100)
@@ -51,4 +79,30 @@ func play() {
 			}
 		}
 	}
+	finish := time.Now()
+	timeSpent := finish.Sub(start)
+	fmt.Printf("Вітаю! Ти впорався за: %v", timeSpent)
+
+	fmt.Println("Введіть ім'я :")
+	name := ""
+	fmt.Scan(&name)
+
+	//	var u domain.User
+	//	u.Id = id
+	//	u.Name = name
+	//	u.Time = timeSpent
+
+	user := domain.User{
+		Id:   id,
+		Name: name,
+		Time: timeSpent,
+	}
+
+	id++
+	return user
+
+}
+
+func sortAndSave(user []domain.User) {
+
 }
