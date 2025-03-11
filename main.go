@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"prj-test/domain"
+	"sort"
 	"strconv"
 	"time"
 
@@ -103,6 +106,14 @@ func play() domain.User {
 
 }
 
-func sortAndSave(user []domain.User) {
+func sortAndSave(users []domain.User) {
+	sort.SliceStable(users, func(i, j int) bool {
+		return users[i].Time < users[j].Time
+
+	})
+	file, err := os.OpenFile("users.json", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	if err != nil {
+		log.Printf("sortAndSave(os.OpenFile): %s", err)
+	}
 
 }
